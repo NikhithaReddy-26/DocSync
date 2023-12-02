@@ -1,0 +1,256 @@
+{
+  "users": [
+    {
+      "id": 10001,
+      "userName": "John Carter",
+      "email": "John@gmail.com",
+      "password": "John@123",
+      "avatarPath": "public/assets/icons/avatar.svg",
+      "createdOn": "2023-06-30T22:30:18.000Z",
+      "updatedOn": null
+    },
+    {
+      "id": 10002,
+      "userName": "Karan Choudhary",
+      "email": "karan@gmail.com",
+      "password": "Karan@123",
+      "avatarPath": "public/assets/icons/avatar.svg",
+      "createdOn": "2023-06-30T22:30:18.000Z",
+      "updatedOn": null
+    },
+    {
+      "id": 10003,
+      "userName": "Ayush Bajpai",
+      "email": "Ayush@gmail.com",
+      "password": "Ayush@123",
+      "avatarPath": "public/assets/icons/avatar.svg",
+      "createdOn": "2023-06-30T22:30:18.000Z",
+      "updatedOn": null
+    },
+    {
+      "id": 10004,
+      "userName": "Nikhitha Thimmannagari",
+      "email": "Nikhitha@gmail.com",
+      "password": "Nikhitha@123",
+      "avatarPath": "public/assets/icons/avatar.svg",
+      "createdOn": "2023-06-30T22:30:18.000Z",
+      "updatedOn": null
+    },
+    {
+      "id": 10005,
+      "userName": "Abhishek Goud Bandameedi",
+      "email": "Abhishek@gmail.com",
+      "password": "Abhishek@123",
+      "avatarPath": "public/assets/icons/avatar.svg",
+      "createdOn": "2023-06-30T22:30:18.000Z",
+      "updatedOn": null
+    }
+  ],
+  "notifications": [
+    {
+      "id": 1001,
+      "userId": 10001,
+      "createdByUserId": 10001,
+      "action": "hasUploaded",
+      "fileId": 1,
+      "time": "2023-09-07T22:30:18Z",
+      "isRead": true
+    },
+    {
+      "id": 1002,
+      "userId": 10002,
+      "createdByUserId": 10001,
+      "action": "hasUploaded",
+      "fileId": 1,
+      "time": "2023-09-07T22:30:18Z",
+      "isRead": true
+    },
+    {
+      "id": 1003,
+      "userId": 10003,
+      "createdByUserId": 10001,
+      "action": "hasUploaded",
+      "fileId": 1,
+      "time": "2023-09-07T22:30:18Z",
+      "isRead": false
+    },
+    {
+      "id": 1004,
+      "userId": 10004,
+      "createdByUserId": 10001,
+      "action": "hasUploaded",
+      "fileId": 1,
+      "time": "2023-09-07T22:30:18Z",
+      "isRead": false
+    },
+    {
+      "id": 1005,
+      "userId": 10005,
+      "createdByUserId": 10001,
+      "action": "hasUploaded",
+      "fileId": 1,
+      "time": "2023-09-07T22:30:18Z",
+      "isRead": false
+    },
+    {
+      "id": 1006,
+      "userId": 10001,
+      "createdByUserId": 10004,
+      "action": "hasUploaded",
+      "fileId": 2,
+      "time": "2023-09-03T22:30:18Z",
+      "isRead": false
+    },
+    {
+      "id": 1007,
+      "userId": 10002,
+      "createdByUserId": 10004,
+      "action": "hasUploaded",
+      "fileId": 2,
+      "time": "2023-09-03T22:30:18Z",
+      "isRead": true
+    },
+    {
+      "id": 1008,
+      "userId": 10003,
+      "createdByUserId": 10004,
+      "action": "hasUploaded",
+      "fileId": 2,
+      "time": "2023-09-03T22:30:18Z",
+      "isRead": false
+    },
+    {
+      "id": 1009,
+      "userId": 10004,
+      "createdByUserId": 10004,
+      "action": "hasUploaded",
+      "fileId": 2,
+      "time": "2023-09-03T22:30:18Z",
+      "isRead": true
+    },
+    {
+      "id": 10010,
+      "userId": 10005,
+      "createdByUserId": 10004,
+      "action": "hasUploaded",
+      "fileId": 2,
+      "time": "2023-09-03T22:30:18Z",
+      "isRead": false
+    },
+    {
+      "id": 10011,
+      "userId": 10001,
+      "createdByUserId": 10002,
+      "action": "hasUploaded",
+      "fileId": 3,
+      "time": "2023-09-12T22:30:18Z",
+      "isRead": false
+    },
+    {
+      "id": 10012,
+      "userId": 10002,
+      "createdByUserId": 10002,
+      "action": "hasUploaded",
+      "fileId": 3,
+      "time": "2023-09-11T22:30:18Z",
+      "isRead": true
+    },
+    {
+      "id": 10013,
+      "userId": 10003,
+      "createdByUserId": 10002,
+      "action": "hasUploaded",
+      "fileId": 3,
+      "time": "2023-09-11T22:30:18Z",
+      "isRead": false
+    },
+    {
+      "id": 10014,
+      "userId": 10004,
+      "createdByUserId": 10002,
+      "action": "hasUploaded",
+      "fileId": 3,
+      "time": "2023-09-11T22:30:18Z",
+      "isRead": false
+    },
+    {
+      "id": 10015,
+      "userId": 10005,
+      "createdByUserId": 10002,
+      "action": "hasUploaded",
+      "fileId": 3,
+      "time": "2023-09-12T22:30:18Z",
+      "isRead": false
+    }
+  ],
+  "files": [
+    {
+      "id": 1,
+      "name": "Company agreement.pdf",
+      "path": "/files/sample.pdf",
+      "type": "pdf",
+      "createdOn": "2023-09-07T22:30:18Z",
+      "updatedOn": null
+    },
+    {
+      "id": 2,
+      "name": "Company profile.pdf",
+      "path": "/files/sample.pdf",
+      "type": "pdf",
+      "createdOn": "2023-09-03T22:30:18Z",
+      "updatedOn": null
+    },
+    {
+      "id": 3,
+      "name": "Company contract.pdf",
+      "path": "/files/sample.pdf",
+      "type": "pdf",
+      "createdOn": "2023-09-11T22:30:18Z",
+      "updatedOn": null
+    }
+  ],
+  "searchKeyword": [
+    {
+      "id": 1,
+      "file": "Company agreement.pdf",
+      "filePath": "/files/sample.pdf",
+      "searchResults": [
+        {
+          "id": 1,
+          "fileName": "Company Agreement",
+          "description": "Since being established in 1908 as a sewing machine repair business, the brother group has pursued the diversification and globalization of business in its history of more...",
+          "foundOn": 1,
+          "totalSlide": 5
+        },
+        {
+          "id": 2,
+          "fileName": "Company Agreement",
+          "description": "Since being established in 1908 as a sewing machine repair business, the brother group has pursued the diversification and globalization of business in its history of more...",
+          "foundOn": 2,
+          "totalSlide": 5
+        },
+        {
+          "id": 3,
+          "fileName": "Company Agreement",
+          "description": "Since being established in 1908 as a sewing machine repair business, the brother group has pursued the diversification and globalization of business in its history of more...",
+          "foundOn": 3,
+          "totalSlide": 5
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "file": "Zemoso Policies.pdf",
+      "filePath": "/files/sample.pdf",
+      "searchResults": [
+        {
+          "id": 1,
+          "fileName": "Zemoso Policies",
+          "description": "Since being established in 2012 as an Innovation  business, the brother group has pursued the diversification and globalization of business in its history of more...",
+          "foundOn": 2,
+          "totalSlide": 6
+        }
+      ]
+    }
+  ]
+}

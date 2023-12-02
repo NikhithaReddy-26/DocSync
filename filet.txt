@@ -1,0 +1,518 @@
+
+
+
+
+
+
+
+---
+# Source: bootcamp-chart/templates/configmap.yaml
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: mysql-config
+# data:
+#   config.cnf: |
+#     [mysqld]
+#     max_connections=4000
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+data:
+    config.cnf: |-
+        
+    [mysqld]
+    max_connections=4000
+---
+
+---
+# Source: bootcamp-chart/templates/service.yaml
+# frontend-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mockserver
+spec:
+  # if type
+  selector:
+    app: mockserver
+    project: bootcamp115
+  ports:
+    - port: 8080
+      targetPort: 8080
+      # protocol: TCP
+---
+
+---
+# Source: bootcamp-chart/templates/secret.yaml
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: my-docker-secret
+# type: kubernetes.io/dockerconfigjson
+# data:
+#   .dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6ICJhWE5vZEdsaGNYTmhiV1JoYm1rd01EYzZaMmh3WDNSWmRIZEhWRnBsU1RGMFV6bHFNalJzTlU1YWFtUndkazFqUlc5c2REUmtha3A2U0E9PSIKCQl9LAoJCSJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOiB7CgkJCSJhdXRoIjogImFYTm9kR2xoY1hOaGJXUmhibWs2U1NSb2RHbEFjVGM0Tmc9PSIKCQl9Cgl9Cn0=
+
+---
+# Source: bootcamp-chart/templates/pvc.yml
+# persistent-volume-claim.yaml
+# if database.pvc.enabled is true, this file will be used
+#
+
+---
+# Source: bootcamp-chart/templates/ingress.yml
+# ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: bc116ms.spcluster.tk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mockserver
+                port:
+                  number: 8080
+
+---
+# Source: bootcamp-chart/templates/deployment.yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: mockserver
+spec:
+  selector:
+    matchLabels:
+      app: mockserver
+      project: bootcamp115
+  template:
+    metadata:
+      labels:
+        app: mockserver
+        project: bootcamp115
+    spec:
+      containers:
+        - name: mockserver-pod
+          image: "node:16-alpine:latest"
+          ports:
+            - containerPort: 8080
+
+          # if rediness
+          readinessProbe:
+            httpGet:
+              # if path
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            # if timeoutSeconds
+            # if failureThreshold
+
+          # if liveness
+          livenessProbe:
+            httpGet:
+              # if path
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            # if timeoutSeconds
+            # if failureThreshold
+
+          # if command
+          command:
+            - sh
+            - -c
+
+          # if args
+          args:
+            - npm i -g json-server; cp /app/db.json /home/db.json; json-server -w /home/db.json -p 8080 -H 0.0.0.0
+
+          # if volumeMounts
+          volumeMounts:
+            - name: mock-data
+              mountPath: /app
+      #if volumes
+      volumes:
+        - name: mock-data
+          secret:
+            secretName: mockserver-data
+          configMap:
+            name: mockserver-data
+            # if optional
+          # if persistentVolumeClaim
+      imagePullSecrets:
+        - name: my-docker-secret
+
+---
+
+---
+# Source: bootcamp-chart/templates/database-secret.yaml
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: mysql-secret
+# type: Opaque
+# data:
+#   MYSQL_ROOT_PASSWORD: Qm9vdGNhbXBAOTYh
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-docker-secret
+  type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: "ZXdvSkltRjFkR2h6SWpvZ2V3b0pDU0puYUdOeUxtbHZJam9nZXdvSkNRa2lZWFYwYUNJNklDSmhXRTV2WkVkc2FHTllUbWhpVjFKb1ltMXJkMDFFWXpaYU1taDNXRE5TV21SSVpFaFdSbkJzVTFSR01GVjZiSEZOYWxKelRsVTFZV0Z0VW5ka2F6RnFVbGM1YzJSRVVtdGhhM0EyVTBFOVBTSUtDUWw5TEFvSkNTSm9kSFJ3Y3pvdkwybHVaR1Y0TG1SdlkydGxjaTVwYnk5Mk1TOGlPaUI3Q2drSkNTSmhkWFJvSWpvZ0ltRllUbTlrUjJ4b1kxaE9hR0pYVW1oaWJXczJVMU5TYjJSSGJFRmpWR00wVG1jOVBTSUtDUWw5Q2dsOUNuMD0="
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+  type: Opaque
+data:
+  MYSQL_ROOT_PASSWORD: "Qm9vdGNhbXBAMTE1IQ=="
+---
+---
+# Source: bootcamp-chart/templates/service.yaml
+# frontend-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mockserver
+spec:
+  # if type
+  selector:
+    app: mockserver
+    project: bootcamp115
+  ports:
+    - port: 8080
+      targetPort: 8080
+      # protocol: TCP
+---
+
+---
+# Source: bootcamp-chart/templates/secret.yaml
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: my-docker-secret
+# type: kubernetes.io/dockerconfigjson
+# data:
+#   .dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6ICJhWE5vZEdsaGNYTmhiV1JoYm1rd01EYzZaMmh3WDNSWmRIZEhWRnBsU1RGMFV6bHFNalJzTlU1YWFtUndkazFqUlc5c2REUmtha3A2U0E9PSIKCQl9LAoJCSJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOiB7CgkJCSJhdXRoIjogImFYTm9kR2xoY1hOaGJXUmhibWs2U1NSb2RHbEFjVGM0Tmc9PSIKCQl9Cgl9Cn0=
+
+---
+# Source: bootcamp-chart/templates/pvc.yml
+# persistent-volume-claim.yaml
+# if database.pvc.enabled is true, this file will be used
+#
+
+---
+# Source: bootcamp-chart/templates/ingress.yml
+# ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: bc116ms.spcluster.tk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mockserver
+                port:
+                  number: 8080
+
+---
+# Source: bootcamp-chart/templates/deployment.yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: mockserver
+spec:
+  selector:
+    matchLabels:
+      app: mockserver
+      project: bootcamp115
+  template:
+    metadata:
+      labels:
+        app: mockserver
+        project: bootcamp115
+    spec:
+      containers:
+        - name: mockserver-pod
+          image: "node:16-alpine:latest"
+          ports:
+            - containerPort: 8080
+
+          # if rediness
+          readinessProbe:
+            httpGet:
+              # if path
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            # if timeoutSeconds
+            # if failureThreshold
+
+          # if liveness
+          livenessProbe:
+            httpGet:
+              # if path
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            # if timeoutSeconds
+            # if failureThreshold
+
+          # if command
+          command:
+            - sh
+            - -c
+
+          # if args
+          args:
+            - npm i -g json-server; cp /app/db.json /home/db.json; json-server -w /home/db.json -p 8080 -H 0.0.0.0
+
+          # if volumeMounts
+          volumeMounts:
+            - name: mock-data
+              mountPath: /app
+      #if volumes
+      volumes:
+        - name: mock-data
+          secret:
+            secretName: mockserver-data
+          configMap:
+            name: mockserver-data
+            # if optional
+          # if persistentVolumeClaim
+      imagePullSecrets:
+        - name: my-docker-secret
+
+---
+
+---
+# Source: bootcamp-chart/templates/database-secret.yaml
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: mysql-secret
+# type: Opaque
+# data:
+#   MYSQL_ROOT_PASSWORD: Qm9vdGNhbXBAOTYh
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-docker-secret
+  type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: "ZXdvSkltRjFkR2h6SWpvZ2V3b0pDU0puYUdOeUxtbHZJam9nZXdvSkNRa2lZWFYwYUNJNklDSmhXRTV2WkVkc2FHTllUbWhpVjFKb1ltMXJkMDFFWXpaYU1taDNXRE5TV21SSVpFaFdSbkJzVTFSR01GVjZiSEZOYWxKelRsVTFZV0Z0VW5ka2F6RnFVbGM1YzJSRVVtdGhhM0EyVTBFOVBTSUtDUWw5TEFvSkNTSm9kSFJ3Y3pvdkwybHVaR1Y0TG1SdlkydGxjaTVwYnk5Mk1TOGlPaUI3Q2drSkNTSmhkWFJvSWpvZ0ltRllUbTlrUjJ4b1kxaE9hR0pYVW1oaWJXczJVMU5TYjJSSGJFRmpWR00wVG1jOVBTSUtDUWw5Q2dsOUNuMD0="
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+  type: Opaque
+data:
+  MYSQL_ROOT_PASSWORD: "Qm9vdGNhbXBAMTE1IQ=="
+---
+
+---
+# Source: bootcamp-chart/templates/configmap.yaml
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: mysql-config
+# data:
+#   config.cnf: |
+#     [mysqld]
+#     max_connections=4000
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+data:
+    config.cnf: |
+        
+    [mysqld]
+    max_connections=4000
+---
+---
+# Source: bootcamp-chart/templates/database-secret.yaml
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: mysql-secret
+# type: Opaque
+# data:
+#   MYSQL_ROOT_PASSWORD: Qm9vdGNhbXBAOTYh
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-docker-secret
+  type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: "ZXdvSkltRjFkR2h6SWpvZ2V3b0pDU0puYUdOeUxtbHZJam9nZXdvSkNRa2lZWFYwYUNJNklDSmhXRTV2WkVkc2FHTllUbWhpVjFKb1ltMXJkMDFFWXpaYU1taDNXRE5TV21SSVpFaFdSbkJzVTFSR01GVjZiSEZOYWxKelRsVTFZV0Z0VW5ka2F6RnFVbGM1YzJSRVVtdGhhM0EyVTBFOVBTSUtDUWw5TEFvSkNTSm9kSFJ3Y3pvdkwybHVaR1Y0TG1SdlkydGxjaTVwYnk5Mk1TOGlPaUI3Q2drSkNTSmhkWFJvSWpvZ0ltRllUbTlrUjJ4b1kxaE9hR0pYVW1oaWJXczJVMU5TYjJSSGJFRmpWR00wVG1jOVBTSUtDUWw5Q2dsOUNuMD0="
+---
+# Source: bootcamp-chart/templates/database-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+  type: Opaque
+data:
+  MYSQL_ROOT_PASSWORD: "Qm9vdGNhbXBAMTE1IQ=="
+---
+# Source: bootcamp-chart/templates/configmap.yaml
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: mysql-config
+# data:
+#   config.cnf: |
+#     [mysqld]
+#     max_connections=4000
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+data:
+  config.cnf: |
+    [mysqld]
+    max_connections=4000
+---
+# Source: bootcamp-chart/templates/service.yaml
+# frontend-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mockserver
+spec:
+  # if type
+  selector:
+    app: mockserver
+    project: bootcamp115
+  ports:
+    - port: 8080
+      targetPort: 8080
+      # protocol: TCP
+---
+# Source: bootcamp-chart/templates/deployment.yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: mockserver
+spec:
+  selector:
+    matchLabels:
+      app: mockserver
+      project: bootcamp115
+  template:
+    metadata:
+      labels:
+        app: mockserver
+        project: bootcamp115
+    spec:
+      containers:
+        - name: mockserver-pod
+          image: "node:16-alpine:latest"
+          ports:
+            - containerPort: 8080
+
+          # if rediness
+          readinessProbe:
+            httpGet:
+              # if path
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            # if timeoutSeconds
+            # if failureThreshold
+
+          # if liveness
+          livenessProbe:
+            httpGet:
+              # if path
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            # if timeoutSeconds
+            # if failureThreshold
+
+          # if command
+          command:
+            - sh
+            - -c
+
+          # if args
+          args:
+            - npm i -g json-server; cp /app/db.json /home/db.json; json-server -w /home/db.json -p 8080 -H 0.0.0.0
+
+          # if volumeMounts
+          volumeMounts:
+            - name: mock-data
+              mountPath: /app
+      #if volumes
+      volumes:
+        - name: mock-data
+          secret:
+            secretName: mockserver-data
+          configMap:
+            name: mockserver-data
+            # if optional
+          # if persistentVolumeClaim
+      imagePullSecrets:
+        - name: my-docker-secret
+---
+# Source: bootcamp-chart/templates/ingress.yml
+# ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: bc116ms.spcluster.tk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mockserver
+                port:
+                  number: 8080
+---
+# Source: bootcamp-chart/templates/pvc.yml
+# persistent-volume-claim.yaml
+# if database.pvc.enabled is true, this file will be used
+#
+---
+# Source: bootcamp-chart/templates/secret.yaml
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: my-docker-secret
+# type: kubernetes.io/dockerconfigjson
+# data:
+#   .dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6ICJhWE5vZEdsaGNYTmhiV1JoYm1rd01EYzZaMmh3WDNSWmRIZEhWRnBsU1RGMFV6bHFNalJzTlU1YWFtUndkazFqUlc5c2REUmtha3A2U0E9PSIKCQl9LAoJCSJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOiB7CgkJCSJhdXRoIjogImFYTm9kR2xoY1hOaGJXUmhibWs2U1NSb2RHbEFjVGM0Tmc9PSIKCQl9Cgl9Cn0=

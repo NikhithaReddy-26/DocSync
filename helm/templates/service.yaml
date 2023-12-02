@@ -1,0 +1,23 @@
+# frontend-service.yaml
+{{- range .Values.services }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+spec:
+  # if type
+  {{- if .type }}
+  type: {{ .type }}
+  {{- end }}
+  selector:
+    app: {{ .labels.app }}
+    project: {{ .labels.project }}
+  ports:
+    - port: {{ .port }}
+      targetPort: {{ .targetPort }}
+      # protocol: TCP
+      {{- with .nodePort }}
+      nodePort: {{ . }}
+      {{- end }}
+---
+{{- end }}

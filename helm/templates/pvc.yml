@@ -1,0 +1,17 @@
+# persistent-volume-claim.yaml
+# if database.pvc.enabled is true, this file will be used
+{{- if .Values.pvc }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.pvc.name }}
+spec:
+  resources:
+    requests:
+      storage: {{ .Values.pvc.storageSize }}
+  volumeMode: {{ .Values.pvc.volumeMode }}
+  storageClassName: {{ .Values.pvc.storageClassName }}
+  accessModes:
+    - {{ .Values.pvc.accessModes | join ", " }}
+---
+{{- end }}

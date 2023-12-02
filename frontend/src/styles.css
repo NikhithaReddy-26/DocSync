@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "Manrope-regular";
+  src: url("../public/assets/fonts/Manrope-Regular.ttf");
+}
+@font-face {
+  font-family: "Manrope-semi-bold";
+  src: url("../public/assets/fonts/Manrope-SemiBold.ttf");
+}
+@font-face {
+  font-family: "Manrope-bold";
+  src: url("../public/assets/fonts/Manrope-Bold.ttf");
+}
+body{
+  padding: 0;
+  margin:0;
+}

@@ -1,0 +1,2 @@
+ALTER TABLE contiq.usr
+ADD CONSTRAINT UC_Email UNIQUE (email);

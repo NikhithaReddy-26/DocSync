@@ -1,0 +1,30 @@
+server:
+  port: 8083
+  servlet:
+    context-path: /api/v1
+
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:mysql://3.141.20.73:30001/contiq
+    username: root
+    password: Bootcamp@116!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+  flyway:
+    baseline-on-migrate: true
+    locations: filesystem:db/migration
+    outOfOrder: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+jwt:
+  secret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+
+app:
+  jwttoken:
+       message: 'Verified Email'

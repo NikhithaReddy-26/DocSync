@@ -1,0 +1,33 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /api/v1
+
+spring:
+  application:
+    name: file-service
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+
+file:
+  storage:
+    base: ./file-service/uploads
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+elasticsearch:
+  cluster-name: elasticsearch
+  cluster-nodes: https://elasticbc116.spcluster.tk/
+  host: elasticbc116.spcluster.tk
+  port: 443
+  username: elastic
+  password: Bootcamp@116
+  truststore:
+    path: /home/Abhishb/Downloads/truststore.jks
+    password: changeit

@@ -1,0 +1,141 @@
+# deployment.yaml
+{{- range .Values.deployments }}
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: {{ .name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .labels.app }}
+      project: {{ .labels.project }}
+  template:
+    metadata:
+      labels:
+        app: {{ .labels.app }}
+        project: {{ .labels.project }}
+    spec:
+      containers:
+        - name: {{ .container.name }}
+          image: "{{ .container.image.repository }}:{{ .container.image.tag }}"
+          ports:
+            - containerPort: {{ .container.ports.containerPort }}
+          {{- if .container.env }}
+          env:
+          {{- range .container.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+          {{- end }}
+          {{- end }}
+
+          # if envFrom
+          {{- if .container.envFrom }}
+          envFrom:
+          {{- range .container.envFrom }}
+            - secretRef:
+                name: {{ .secretRef.name }}
+          {{- end }}
+          {{- end }}
+
+          # if rediness
+          {{- if .container.readinessProbe }}
+          readinessProbe:
+            httpGet:
+              # if path
+              {{- if .container.readinessProbe.httpGet.path }}
+              path: {{ .container.readinessProbe.httpGet.path }}
+              {{- end }}
+              port: {{ .container.readinessProbe.httpGet.port }}
+            initialDelaySeconds: {{ .container.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .container.readinessProbe.periodSeconds }}
+            # if timeoutSeconds
+            {{- if .container.readinessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ .container.readinessProbe.timeoutSeconds }}
+            {{- end }}
+            # if failureThreshold
+            {{- if .container.readinessProbe.failureThreshold }}
+            failureThreshold: {{ .container.readinessProbe.failureThreshold }}
+            {{- end }}
+          {{- end }}
+
+          # if liveness
+          {{- if .container.livenessProbe }}
+          livenessProbe:
+            httpGet:
+              # if path
+              {{- if .container.livenessProbe.httpGet.path }}
+              path: {{ .container.livenessProbe.httpGet.path }}
+              {{- end }}
+              port: {{ .container.livenessProbe.httpGet.port }}
+            initialDelaySeconds: {{ .container.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .container.livenessProbe.periodSeconds }}
+            # if timeoutSeconds
+            {{- if .container.livenessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ .container.livenessProbe.timeoutSeconds }}
+            {{- end }}
+            # if failureThreshold
+            {{- if .container.livenessProbe.failureThreshold }}
+            failureThreshold: {{ .container.livenessProbe.failureThreshold }}
+            {{- end }}
+          {{- end }}
+
+          # if command
+          {{- if .container.command }}
+          command:
+          {{- range .container.command }}
+            - {{ . }}
+          {{- end }}
+          {{- end }}
+
+          # if args
+          {{- if .container.args }}
+          args:
+          {{- range .container.args }}
+            - {{ . }}
+          {{- end }}
+          {{- end }}
+
+          # if volumeMounts
+          {{- if .container.volumeMounts }}
+          volumeMounts:
+          {{- range .container.volumeMounts }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+          {{- end }}
+          {{- end }}
+      #if volumes
+      {{- if .volumes }}
+      volumes:
+      {{- range .volumes }}
+        - name: {{ .name }}
+          {{- if .secret }}
+          secret:
+            secretName: {{ .secret.secretName }}
+          {{- end }}
+          {{- if .configMap }}
+          configMap:
+            name: {{ .configMap.name }}
+            # if optional
+            {{- if .configMap.optional }}
+            optional: {{ .configMap.optional }}
+            {{- end }}
+          {{- end }}
+          # if persistentVolumeClaim
+          {{- if .persistentVolumeClaim }}
+          persistentVolumeClaim:
+            claimName: {{ .persistentVolumeClaim.claimName }}
+          {{- end }}
+      {{- end }}
+      {{- end }}
+
+
+
+      {{- if .imagePullSecrets }}
+      imagePullSecrets:
+      {{- range .imagePullSecrets }}
+        - name: {{ .name }}
+      {{- end }}
+      {{- end }}
+
+---
+{{- end }}
